@@ -1,0 +1,149 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+
+
+body {
+    background: linear-gradient(120deg, #0f0f0f, #1a1a1a);
+    color: #00ffc3;
+    font-family: 'Orbitron', sans-serif;
+    padding-top: 70px; /* Đẩy nội dung xuống dưới navbar cố định */
+  }
+
+/* ===== NAVBAR ===== */
+/* Căn giữa menu trong navbar */
+.navbar-nav {
+    display: flex;
+    justify-content: center;  /* Canh giữa các item */
+    width: 100%;
+  }
+  
+  .navbar-nav .nav-item {
+    margin: 0 15px;  /* Thêm khoảng cách giữa các mục */
+  }
+  
+  .navbar {
+    background-color: #1f2937 !important;
+  }
+  
+  .navbar-brand {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.5rem;
+    color: #00ffc3 !important;
+    text-shadow: 0 0 5px #00ffc3, 0 0 10px #00ffc3; /* Thêm dòng này */
+}
+
+  
+  .nav-link {
+    color: #9ca3af !important;  /* Màu chữ nav-link */
+    font-weight: 500;
+  }
+  
+  .nav-link:hover {
+    color: #00ffc3 !important;  /* Màu chữ khi hover */
+  }
+  
+  /* Navbar toggle button cho màn hình nhỏ */
+  .navbar-toggler {
+    border-color: #00ffc3;
+  }
+  
+  .navbar-toggler-icon {
+    background-color: #00ffc3;
+  }
+  
+  /* Khi navbar collapse trên màn hình nhỏ */
+  .navbar-collapse {
+    text-align: center;
+  }
+  
+/* ===== HERO SECTION ===== */
+.hero-event {
+  height: 50vh;
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 255, 195, 0.1)), url('https://wallpapercave.com/wp/wp7888542.jpg') center/cover no-repeat;
+  text-shadow: 0 0 10px #00ffc3;
+}
+
+/* ===== COMBO CARDS ===== */
+.hero {
+    text-align: center;
+    padding: 100px 20px;
+    background: radial-gradient(circle, #111827, #000000);
+    animation: fadeIn 2s ease-in;
+  }
+  
+  .hero h1 {
+    font-size: 3.5rem;
+    text-shadow: 0 0 10px #00ffc3, 0 0 20px #00ffc3;
+  }
+  
+  .hero p {
+    font-size: 1.5rem;
+    color: #9effe6;
+  }
+.card {
+  background-color: #1a1a1a;
+  color: #00ffc3;
+  border: 1px solid #00ffc3;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 20px #00ffc3;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  text-shadow: 0 0 5px #00ffc3;
+}
+
+.card-text {
+  font-size: 1rem;
+}
+
+/* ===== FOOTER ===== */
+footer {
+    background-color: #1f2937;
+    text-align: center;
+    padding: 20px;
+    color: #9ca3af;
+  }
+  
+  /* Hiệu ứng fade in */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Neon text cho tên quán */
+  .text-neon {
+    color: #00ffc3 !important;
+    text-shadow: 0 0 5px #00ffc3, 0 0 10px #00ffc3;
+  }
+  
+  .footer {
+      background-color: #222;
+      color: #fff;
+      text-align: center;
+      padding-top: 20px;
+      padding-bottom: 20px;
+  }
+  
+  .footer p {
+      margin: 0;
+      font-size: 14px;
+  }
+  
+  .social-links {
+      margin-top: 10px;
+  }
+  
+  .social-links .social-icon {
+      font-size: 24px;
+      margin: 0 15px;
+      color: #9ca3af;
+      transition: color 0.3s;
+  }
+  
+  .social-links .social-icon:hover {
+      color: #00ffc3;
+  }
