@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+
 
 body {
   background: linear-gradient(120deg, #0f0f0f, #1a1a1a);
   color: #00ffc3;
-  font-family: 'Orbitron', sans-serif;
-  padding-top: 70px; /* Đẩy nội dung xuống dưới navbar cố định */
+  font-family: Arial, sans-serif; /* Hoặc dùng: 'Roboto', 'Open Sans', ... */
+  padding-top: 70px;
 }
 
 .hero {
@@ -95,3 +95,49 @@ footer {
     color: #00ffc3;
 }
 
+/* Căn giữa menu trong navbar */
+.navbar-nav {
+  display: flex;
+  justify-content: center;  /* Canh giữa các item */
+  width: 100%;
+}
+
+.navbar-nav .nav-item {
+  margin: 0 15px;  /* Thêm khoảng cách giữa các mục */
+}
+/* Styling cho navbar */
+.navbar {
+  background-color: #1f2328 !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* đổ bóng nhẹ bên dưới */
+}
+
+
+.navbar-brand {
+  font-family: Arial, sans-serif;
+  font-size: 1.5rem;
+  color: #00ffc3 !important;
+  text-shadow: 0 0 5px #00ffc3, 0 0 10px #00ffc3; /* Thêm dòng này */
+}
+
+.nav-link {
+  color: #9ca3af !important;  /* Màu chữ nav-link */
+  font-weight: 500;
+}
+
+.nav-link:hover {
+  color: #00ffc3 !important;  /* Màu chữ khi hover */
+}
+
+/* Navbar toggle button cho màn hình nhỏ */
+.navbar-toggler {
+  border-color: #00ffc3;
+}
+
+.navbar-toggler-icon {
+  background-color: #00ffc3;
+}
+
+/* Khi navbar collapse trên màn hình nhỏ */
+.navbar-collapse {
+  text-align: center;
+}

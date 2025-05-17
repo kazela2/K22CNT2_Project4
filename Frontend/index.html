@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quán Internet Gamming</title>
-    <link rel="stylesheet" href="navbar.css">
+    <!-- <link rel="stylesheet" href="navbar.css"> -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="css.css">
@@ -21,11 +21,16 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item"><a class="nav-link active" href="#gioithieu">Giới thiệu</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#dichvu">Dịch vụ</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#maytram">Máy Trạm</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#giagiochoi">Giá Giờ Chơi</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./dichvu.html">Dịch vụ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./maytram.html">Máy Trạm</a></li>
                     <li class="nav-item"><a class="nav-link" href="./Event.html">Event</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./loginnaptien.html">Nạp Tiền</a></li>
                 </ul>
+                <div class="d-flex">
+                    <a href="login.html" class="btn btn-outline-light me-2" id="loginBtn">Đăng nhập</a>
+                    <a href="register.html" class="btn btn-outline-light" id="registerBtn">Đăng ký</a>
+                    <a href="#" class="btn btn-outline-light d-none" id="logoutBtn">Đăng xuất</a>
+                  </div>
             </div>
         </div>
     </nav>
@@ -38,7 +43,7 @@
     </div>
 
     <!-- Dịch vụ -->
-    <div class="section container" id="dichvu">
+    <div class="section container">
         <h2>Dịch vụ của chúng tôi</h2>
         <ul>
             <li>Phòng máy lạnh, thiết kế không gian thoải mái cho game thủ</li>
@@ -49,8 +54,8 @@
     </div>
 
     <!-- Máy Trạm -->
-    <div class="section container" id="maytram">
-        <h2>Máy Trạm</h2>
+    <div class="section container">
+        <h2>Cấu Hình Máy</h2>
         <ul>
           <li>Intel Core i9, RTX 5090ti, RAM 128GB</li>
           <li>Màn hình 360Hz, phím cơ Razer, tai nghe 7.1</li>
@@ -60,7 +65,7 @@
     </div>
 
     <!-- Giá giờ chơi -->
-    <div class="section container" id="giagiochoi">
+    <div class="section container">
         <h2>Giá giờ chơi</h2>
         <ul>
           <li>Thường: 50.000đ / giờ</li>
@@ -92,7 +97,8 @@
     
     
 
-    <!-- Thêm Bootstrap JS để target -->
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="out.js"></script>
 </body>
 </html>

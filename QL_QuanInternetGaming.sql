@@ -4,8 +4,18 @@ USE QL_QuanInternetGaming
 CREATE TABLE MayTram (
     MaMay INT PRIMARY KEY IDENTITY(1,1),
     TenMay NVARCHAR(50),
-    TrangThai NVARCHAR(20) CHECK (TrangThai IN ('Trống', 'Đang chơi', 'Bảo trì')),
+    TrangThai NVARCHAR(20) CHECK (TrangThai IN (N'Trống', N'Đang chơi', N'Bảo trì')),
+    GiaTheoGio DECIMAL(18,2) DEFAULT 10000,
     GhiChu NVARCHAR(255)
+);
+
+
+CREATE TABLE TaiKhoanAdmin (
+    MaAdmin INT PRIMARY KEY IDENTITY(1,1),
+    HoTen NVARCHAR(100),
+    TenDangNhap NVARCHAR(50) UNIQUE,
+    MatKhau NVARCHAR(100),
+    VaiTro NVARCHAR(20) DEFAULT 'Admin' CHECK (VaiTro = 'Admin')
 );
 
 CREATE TABLE NhanVien (
@@ -14,49 +24,49 @@ CREATE TABLE NhanVien (
     VaiTro NVARCHAR(20) CHECK (VaiTro IN ('NhanVien', 'QuanLy'))
 );
 
-CREATE TABLE KhachHang (
-    MaKH INT PRIMARY KEY IDENTITY(1,1),
-    HoTen NVARCHAR(100),
-    LoaiKH NVARCHAR(20) CHECK (LoaiKH IN ('VangLai', 'ThanhVien')),
-    SoDienThoai NVARCHAR(20),
-    DiaChi NVARCHAR(255),
-    SoDu DECIMAL(18,2) DEFAULT 0
-);
 
 CREATE TABLE TaiKhoanThanhVien (
     MaTaiKhoan INT PRIMARY KEY IDENTITY(1,1),
-    MaKH INT FOREIGN KEY REFERENCES KhachHang(MaKH),
+	HoTen NVARCHAR(100),
+    SoDienThoai NVARCHAR(20),
     TenDangNhap NVARCHAR(50) UNIQUE,
     MatKhau NVARCHAR(100),
-    SoDu DECIMAL(18,2) DEFAULT 0
+    SoDu DECIMAL(18,2) DEFAULT 0,
+    NgayTao DATETIME DEFAULT GETDATE()
 );
 
 CREATE TABLE PhienChoi (
     MaPhien INT PRIMARY KEY IDENTITY(1,1),
     MaMay INT FOREIGN KEY REFERENCES MayTram(MaMay),
-    MaKH INT FOREIGN KEY REFERENCES KhachHang(MaKH),
+	MaTaiKhoan INT FOREIGN KEY REFERENCES TaiKhoanThanhVien(MaTaiKhoan),
     GioBatDau DATETIME,
     GioKetThuc DATETIME,
     TongTien DECIMAL(18,2)
 );
 
+CREATE TABLE LichSuDangNhapKhach (
+    MaLichSu INT PRIMARY KEY IDENTITY(1,1),
+    MaTaiKhoan INT FOREIGN KEY REFERENCES TaiKhoanThanhVien(MaTaiKhoan),
+    ThoiGianDangNhap DATETIME,
+    ThoiGianDangXuat DATETIME
+);
 
 CREATE TABLE SanPhamDichVu (
     MaSP INT PRIMARY KEY IDENTITY(1,1),
     TenSP NVARCHAR(100),
-    DonGia DECIMAL(18,2),
-    SoLuongTon INT
+	LoaiSP NVARCHAR(50),
+    DonGia DECIMAL(18,2)
 );
 
-CREATE TABLE HoaDonDichVu (
+CREATE TABLE HoaDon (
     MaHD INT PRIMARY KEY IDENTITY(1,1),
     MaPhien INT FOREIGN KEY REFERENCES PhienChoi(MaPhien),
     NgayLap DATETIME DEFAULT GETDATE(),
     TongTien DECIMAL(18,2)
 );
 
-CREATE TABLE ChiTietHoaDonDichVu (
-    MaHD INT FOREIGN KEY REFERENCES HoaDonDichVu(MaHD),
+CREATE TABLE ChiTietHoaDon (
+    MaHD INT FOREIGN KEY REFERENCES HoaDon(MaHD),
     MaSP INT FOREIGN KEY REFERENCES SanPhamDichVu(MaSP),
     SoLuong INT,
     DonGia DECIMAL(18,2),
@@ -65,25 +75,6 @@ CREATE TABLE ChiTietHoaDonDichVu (
 );
 
 
-CREATE TABLE LichSuNapTien (
-    MaNap INT PRIMARY KEY IDENTITY(1,1),
-    MaKH INT FOREIGN KEY REFERENCES KhachHang(MaKH),
-    SoTien DECIMAL(18,2),
-    NgayNap DATETIME DEFAULT GETDATE()
-);
-
-CREATE TABLE LichSuDangNhap (
-    MaNV INT FOREIGN KEY REFERENCES NhanVien(MaNV),
-    ThoiGianDangNhap DATETIME,
-    ThoiGianDangXuat DATETIME
-);
-
-CREATE TABLE CauHinhGiaTien (
-    MaGia INT PRIMARY KEY IDENTITY(1,1),
-    GiaTheoGio DECIMAL(18,2),
-    MoTa NVARCHAR(255)
-);
-
 CREATE TABLE BaoCaoDoanhThu (
     Ngay DATE PRIMARY KEY,
     TongDoanhThu DECIMAL(18,2),
@@ -91,46 +82,65 @@ CREATE TABLE BaoCaoDoanhThu (
     SPBanChayNhat NVARCHAR(100)
 );
 
-INSERT INTO MayTram (TenMay, TrangThai, GhiChu) VALUES
-(N'Máy 01', N'Trống', N'Phòng máy lạnh'),
-(N'Máy 02', N'Bảo trì', N'Lỗi màn hình'),
-(N'Máy 03', N'Trống', N'')
 
+
+
+-- MayTram
+INSERT INTO MayTram (TenMay, TrangThai, GiaTheoGio, GhiChu) VALUES
+(N'Máy 1', N'Trống', 10000, NULL),
+(N'Máy 2', N'Đang chơi', 12000, N'Khách chơi game LOL'),
+(N'Máy 3', N'Bảo trì', 10000, N'Lỗi phần mềm');
+
+-- NhanVien
 INSERT INTO NhanVien (HoTen, VaiTro) VALUES
-(N'Nguyễn Văn A', N'QuanLy'),
-(N'Trần Thị B', N'NhanVien')
+(N'Ngô Hoàng Minh', N'QuanLy'),
+(N'Lê Hoàng Long', N'QuanLy'),
+(N'Lê Trần Khánh Duy', N'QuanLy'),
+(N'Trần Minh Nam', N'NhanVien');
 
-INSERT INTO KhachHang (HoTen, LoaiKH, SoDienThoai, DiaChi, SoDu) VALUES
-(N'Khách Vãng Lai 1', N'VangLai', NULL, NULL, 0),
-(N'Nguyễn Thành Viên', N'ThanhVien', '0912345678', N'Hà Nội', 100000)
+-- TaiKhoanThanhVien
+INSERT INTO TaiKhoanThanhVien (HoTen, SoDienThoai, TenDangNhap, MatKhau, SoDu) VALUES
+(N'Ngô Minh Khoa', '0909123456', 'khoa123', '123', 50000),
+(N'Phạm Lan Hương', '0909345678', 'huongpl', '123', 75000),
+(N'Trịnh Công Sơn', '0909988776', 'sontrinh', '123', 100000);
 
-INSERT INTO TaiKhoanThanhVien (MaKH, TenDangNhap, MatKhau, SoDu) VALUES
-(2, 'nguyen_tv', 'matkhau123', 100000)
+-- PhienChoi
+INSERT INTO PhienChoi (MaMay, MaTaiKhoan, GioBatDau, GioKetThuc, TongTien) VALUES
+(1, 1, '2025-05-17 08:00', '2025-05-17 09:00', 10000),
+(2, 2, '2025-05-17 09:15', '2025-05-17 10:45', 18000),
+(1, 3, '2025-05-17 11:00', NULL, NULL);
 
-INSERT INTO PhienChoi (MaMay, MaKH, GioBatDau, GioKetThuc, TongTien) VALUES
-(1, 2, '2025-05-09 08:00', '2025-05-09 09:30', 7500)
+-- LichSuDangNhapKhach
+INSERT INTO LichSuDangNhapKhach (MaTaiKhoan, ThoiGianDangNhap, ThoiGianDangXuat) VALUES
+(1, '2025-05-17 08:00', '2025-05-17 09:00'),
+(2, '2025-05-17 09:15', '2025-05-17 10:45'),
+(3, '2025-05-17 11:00', NULL);
 
-INSERT INTO SanPhamDichVu (TenSP, DonGia, SoLuongTon) VALUES
-(N'Nước suối', 10000, 50),
-(N'Mì tôm trứng', 15000, 30),
-(N'Sting', 12000, 40)
+-- SanPhamDichVu
+INSERT INTO SanPhamDichVu (TenSP, LoaiSP, DonGia) VALUES
+(N'Nước suối', N'Đồ uống', 10000),
+(N'Mì ly', N'Đồ ăn', 15000),
+(N'Cafe đen', N'Đồ uống', 12000);
 
-INSERT INTO HoaDonDichVu (MaPhien, TongTien) VALUES
-(1, 27000)
+-- HoaDon
+INSERT INTO HoaDon (MaPhien, NgayLap, TongTien) VALUES
+(1, '2025-05-17', 35000),
+(2, '2025-05-17', 12000),
+(1, '2025-05-17', 10000);
 
-INSERT INTO ChiTietHoaDonDichVu (MaHD, MaSP, SoLuong, DonGia) VALUES
+-- ChiTietHoaDon
+INSERT INTO ChiTietHoaDon (MaHD, MaSP, SoLuong, DonGia) VALUES
 (1, 1, 1, 10000),
-(1, 2, 1, 15000) 
+(1, 2, 1, 15000),
+(1, 3, 1, 10000),
+(2, 3, 1, 12000),
+(3, 1, 1, 10000);
 
-INSERT INTO LichSuNapTien (MaKH, SoTien) VALUES
-(2, 100000)
-
-INSERT INTO LichSuDangNhap (MaNV, ThoiGianDangNhap, ThoiGianDangXuat) VALUES
-(1, '2025-05-09 08:00', '2025-05-09 17:00')
-
-INSERT INTO CauHinhGiaTien (GiaTheoGio, MoTa) VALUES
-(5000, N'Giá bình thường'),
-(3000, N'Khuyến mãi giờ vàng (8h-10h)')
-
+-- BaoCaoDoanhThu
 INSERT INTO BaoCaoDoanhThu (Ngay, TongDoanhThu, TongGioChoi, SPBanChayNhat) VALUES
-('2025-05-09', 345000, 18, N'Nước suối')
+('2025-05-15', 50000, 4, N'Nước suối'),
+('2025-05-16', 30000, 3, N'Café đen'),
+('2025-05-17', 55000, 5, N'Mì ly');
+-- TaikhoanAdmin
+INSERT INTO TaiKhoanAdmin (HoTen, TenDangNhap, MatKhau) VALUES
+(N'Ba Anh Em Nhà Hề', 'admin', '123456');

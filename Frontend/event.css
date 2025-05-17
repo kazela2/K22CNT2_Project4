@@ -1,12 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+
+
 
 
 body {
-    background: linear-gradient(120deg, #0f0f0f, #1a1a1a);
-    color: #00ffc3;
-    font-family: 'Orbitron', sans-serif;
-    padding-top: 70px; /* Đẩy nội dung xuống dưới navbar cố định */
-  }
+  background: linear-gradient(120deg, #0f0f0f, #1a1a1a);
+  color: #00ffc3;
+  font-family: Arial, sans-serif; /* Hoặc dùng: 'Roboto', 'Open Sans', ... */
+  padding-top: 70px;
+}
 
 /* ===== NAVBAR ===== */
 /* Căn giữa menu trong navbar */
@@ -17,31 +18,33 @@ body {
   }
   
   .navbar-nav .nav-item {
-    margin: 0 15px;  /* Thêm khoảng cách giữa các mục */
+    margin: 0 15px; 
   }
   
   .navbar {
-    background-color: #1f2937 !important;
+    background-color: rgba(31, 41, 55, 0.95) !important; /* thêm độ mờ trong suốt */
+    backdrop-filter: blur(4px); /* hiệu ứng làm mờ phía sau */
   }
   
+  
   .navbar-brand {
-    font-family: 'Orbitron', sans-serif;
+    font-family: Arial, sans-serif;
     font-size: 1.5rem;
     color: #00ffc3 !important;
-    text-shadow: 0 0 5px #00ffc3, 0 0 10px #00ffc3; /* Thêm dòng này */
-}
+    text-shadow: 0 0 10px #00ffc3, 0 0 20px #00ffc3;
+  }
+  
 
   
   .nav-link {
-    color: #9ca3af !important;  /* Màu chữ nav-link */
+    color: #9ca3af !important;
     font-weight: 500;
   }
   
   .nav-link:hover {
-    color: #00ffc3 !important;  /* Màu chữ khi hover */
+    color: #00ffc3 !important; 
   }
-  
-  /* Navbar toggle button cho màn hình nhỏ */
+
   .navbar-toggler {
     border-color: #00ffc3;
   }
@@ -72,8 +75,9 @@ body {
   
   .hero h1 {
     font-size: 3.5rem;
-    text-shadow: 0 0 10px #00ffc3, 0 0 20px #00ffc3;
+    text-shadow: 0 0 5px #00ffc3, 0 0 10px #00ffc3;
   }
+  
   
   .hero p {
     font-size: 1.5rem;
@@ -147,3 +151,18 @@ footer {
   .social-links .social-icon:hover {
       color: #00ffc3;
   }
+
+  .event-post-box {
+    display: inline-block;
+    text-align: left;
+    background-color: #2d87a2; /* màu tối phù hợp với theme */
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(10, 226, 176, 0.911);
+    margin-left: 10px;
+    margin-right: 10px;
+    border-left: 4px solid #00ffc3;
+    
+  }
+  
+  

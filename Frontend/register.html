@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Ký</title>
+    <link rel="stylesheet" href="register.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Đăng Ký Thành Viên</h2>
+        <form id="registerForm">
+            <label for="HoTen">Họ và Tên</label>
+            <input type="text" id="HoTen" name="HoTen" required />
+
+            <label for="SoDienThoai">Số Điện Thoại</label>
+            <input type="tel" id="SoDienThoai" name="SoDienThoai" required pattern="[0-9]{9,15}" title="Chỉ nhập số, từ 9 đến 15 ký tự" />
+
+            <label for="TenDangNhap">Tên Đăng Nhập</label>
+            <input type="text" id="TenDangNhap" name="TenDangNhap" required />
+
+            <label for="MatKhau">Mật Khẩu</label>
+            <input type="password" id="MatKhau" name="MatKhau" required minlength="3" />
+
+            <button type="submit">Đăng Ký</button>
+        </form>
+        <div class="message" id="message"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('registerForm');
+        const messageDiv = document.getElementById('message');
+    
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+    
+            const data = {
+                HoTen: form.HoTen.value.trim(),
+                SoDienThoai: form.SoDienThoai.value.trim(),
+                TenDangNhap: form.TenDangNhap.value.trim(),
+                MatKhau: form.MatKhau.value.trim()
+            };
+    
+            try {
+                const response = await fetch('http://127.0.0.1:5000/TaiKhoanThanhVien/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+    
+                const result = await response.json();
+    
+                if (response.ok && result.status === 'success') {
+                    messageDiv.textContent = result.message;
+                    messageDiv.className = 'message success';
+                    form.reset();
+    
+                    // ✅ Chờ 1.5 giây rồi chuyển sang trang index.html
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1500);
+                } else {
+                    messageDiv.textContent = result.message || 'Đăng ký thất bại.';
+                    messageDiv.className = 'message error';
+                }
+            } catch (error) {
+                messageDiv.textContent = 'Lỗi kết nối tới server.';
+                messageDiv.className = 'message error';
+            }
+        });
+    </script>
+    
+</body>
+</html>

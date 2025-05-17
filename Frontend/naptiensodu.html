@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Nạp tiền số dư</title>
+  <link rel="stylesheet" href="thanhvien.css" />
+</head>
+<body class="container pt-5">
+
+  <h3>Nạp tiền vào tài khoản</h3>
+  <div>
+    <p>Số dư hiện tại: <span id="currentBalance">0</span> VND</p>
+  </div>
+
+  <form id="napTienForm">
+    <div class="mb-3">
+      <label for="amount" class="form-label">Số tiền nạp (VND)</label>
+      <input type="number" id="amount" class="form-control" min="1000" required />
+      <small class="text-muted">Số tiền nạp tối thiểu 1,000 VND</small>
+    </div>
+    <button type="submit" class="btn btn-success">Nạp tiền</button>
+  </form>
+
+  <div id="message" class="mt-3"></div>
+
+  <button id="backBtn" class="btn btn-secondary mt-3">Quay lại</button>
+
+  <script>
+    const napTienForm = document.getElementById('napTienForm');
+    const messageDiv = document.getElementById('message');
+    const currentBalanceSpan = document.getElementById('currentBalance');
+    const backBtn = document.getElementById('backBtn');
+
+    // Lấy thông tin tài khoản từ localStorage
+    let taiKhoan = JSON.parse(localStorage.getItem('taiKhoanThanhVien'));
+    if (!taiKhoan || !taiKhoan.MaTaiKhoan) {
+      messageDiv.textContent = "Bạn chưa đăng nhập. Vui lòng đăng nhập trước.";
+      napTienForm.style.display = "none";
+      backBtn.style.display = "inline-block"; // Cho hiện nút quay lại dù chưa đăng nhập
+    } else {
+      // Hiển thị số dư hiện tại
+      currentBalanceSpan.textContent = taiKhoan.SoDu.toLocaleString();
+    }
+
+    napTienForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const amount = parseFloat(document.getElementById('amount').value);
+      if (isNaN(amount) || amount < 1000) {
+        messageDiv.textContent = "Vui lòng nhập số tiền nạp hợp lệ (tối thiểu 1,000 VND).";
+        return;
+      }
+
+      // Gọi API nạp tiền
+      fetch('http://127.0.0.1:5000/TaiKhoanThanhVien/napTien', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          MaTaiKhoan: taiKhoan.MaTaiKhoan,
+          SoTienNap: amount
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 'success') {
+          // Cập nhật lại số dư trong localStorage
+          taiKhoan.SoDu += amount;
+          localStorage.setItem('taiKhoanThanhVien', JSON.stringify(taiKhoan));
+          currentBalanceSpan.textContent = taiKhoan.SoDu.toLocaleString();
+
+          messageDiv.textContent = `Nạp tiền thành công! Số dư mới: ${taiKhoan.SoDu.toLocaleString()} VND`;
+          document.getElementById('amount').value = '';
+        } else {
+          messageDiv.textContent = 'Lỗi khi nạp tiền: ' + data.message;
+        }
+      })
+      .catch(err => {
+        messageDiv.textContent = 'Lỗi kết nối server';
+        console.error(err);
+      });
+
+    });
+
+    // Xử lý nút quay lại
+    backBtn.addEventListener('click', function() {
+      window.location.href = 'maytram.html';
+    });
+  </script>
+</body>
+</html>

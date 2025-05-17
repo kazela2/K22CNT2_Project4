@@ -1,0 +1,132 @@
+body {
+    background: linear-gradient(120deg, #0f0f0f, #1a1a1a);
+    color: #00ffc3;
+    font-family: Arial, sans-serif; /* Hoặc dùng: 'Roboto', 'Open Sans', ... */
+    padding-top: 70px;
+  }
+/* ===== NAVBAR ===== */
+.navbar-nav {
+    display: flex;
+    justify-content: center;  
+    width: 100%;
+  }
+  
+  .navbar-nav .nav-item {
+    margin: 0 15px; 
+  }
+  
+  .navbar {
+    background-color: rgba(31, 41, 55, 0.95) !important;
+    backdrop-filter: blur(4px); 
+  }
+  
+  
+  .navbar-brand {
+    font-family: Arial, sans-serif;
+    font-size: 1.5rem;
+    color: #00ffc3 !important;
+    text-shadow: 0 0 10px #00ffc3, 0 0 20px #00ffc3;
+  }
+  
+
+  
+  .nav-link {
+    color: #9ca3af !important;
+    font-weight: 500;
+  }
+  
+  .nav-link:hover {
+    color: #00ffc3 !important; 
+  }
+
+  .navbar-toggler {
+    border-color: #00ffc3;
+  }
+  
+  .navbar-toggler-icon {
+    background-color: #00ffc3;
+  }
+  .navbar-collapse {
+    text-align: center;
+  }
+
+  /* ===== MÁY TRẠM SECTION ===== */
+.maytram-section {
+    padding: 100px 20px;
+    background: radial-gradient(circle, #0f172a, #000);
+    color: #fff;
+    text-align: center;
+  }
+  
+  .maytram-section h2 {
+    font-size: 2.8rem;
+    margin-bottom: 40px;
+    text-shadow: 0 0 5px #00ffc3, 0 0 10px #00ffc3;
+    color: #00ffc3;
+  }
+  
+  /* ===== CARD ===== */
+  #maytram-list .card {
+    background-color: #1e293b;
+    color: #e0f7fa;
+    border: none;
+    border-radius: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  #maytram-list .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 20px rgba(0, 255, 195, 0.4);
+  }
+  
+  #maytram-list .card-title {
+    font-size: 1.4rem;
+    color: #00ffc3;
+    font-weight: bold;
+  }
+  
+  #maytram-list .card-text {
+    font-size: 1rem;
+    color: #ffffff !important;
+  }
+  
+  /* Responsive spacing */
+  @media (max-width: 768px) {
+    .maytram-section h2 {
+      font-size: 2rem;
+    }
+  }
+
+  .danhsach {
+    font-size: 4rem;
+    font-weight: 900;
+    color: black; /* màu bên trong chữ */
+    -webkit-text-stroke: 2px #00ffc3; /* viền xanh neon */
+    text-shadow:
+      0 0 10px #00ffc3,
+      0 0 20px #00ffc3,
+      0 0 30px #00ffc3,
+      0 0 40px #00ffc3;
+    
+    /* các thuộc tính khác giữ nguyên */
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto 50px;
+    padding: 20px 40px;
+    text-align: center;
+    text-transform: none;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 20px;
+    
+    animation: fadeIn 2s ease forwards;
+    opacity: 0;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px);}
+    to { opacity: 1; transform: translateY(0);}
+  }
+  
+
+  
+  
