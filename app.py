@@ -240,6 +240,116 @@ def get_all_sanpham():
     } for row in rows])
 
 
+@app.route('/HoaDon/add', methods=['POST'])
+def add_hoadon():
+    data = request.json
+    ngay_lap = datetime.now()
+    tong_tien = data.get('TongTien', 0)
+
+    cursor = con.cursor()
+    try:
+        cursor.execute("""
+            INSERT INTO HoaDon (NgayLap, TongTien)
+            VALUES (?, ?)
+        """, (ngay_lap, tong_tien))
+        con.commit()
+
+        # Lấy ID hóa đơn vừa tạo
+        cursor.execute("SELECT SCOPE_IDENTITY()")
+        ma_hoadon = cursor.fetchone()[0]
+
+        return jsonify({"status": "success", "MaHoaDon": ma_hoadon})
+    except Exception as e:
+        return jsonify({"status": "fail", "message": str(e)}), 500
+
+
+@app.route('/ChiTietHoaDon/add', methods=['POST'])
+def add_chitiethoadon():
+    data = request.json
+    print("Received data:", data)  # Debug xem dữ liệu nhận được
+
+    ma_hoadon = data.get('MaHoaDon')
+    ma_sp = data.get('MaSP')
+    so_luong = data.get('SoLuong')
+    don_gia = data.get('DonGia')
+
+    # Kiểm tra MaHoaDon và MaSP phải có, không None, không chuỗi rỗng
+    if not ma_hoadon or not ma_sp:
+        return jsonify({"status": "fail", "message": "Thiếu mã hóa đơn hoặc mã sản phẩm"}), 400
+
+    # Kiểm tra so_luong và don_gia có giá trị hợp lệ
+    if so_luong is None or don_gia is None:
+        return jsonify({"status": "fail", "message": "Thiếu số lượng hoặc đơn giá"}), 400
+
+    try:
+        so_luong = int(so_luong)
+        don_gia = float(don_gia)
+    except:
+        return jsonify({"status": "fail", "message": "Số lượng hoặc đơn giá không hợp lệ"}), 400
+
+    thanh_tien = so_luong * don_gia
+
+    cursor = con.cursor()
+    try:
+        cursor.execute("""
+            INSERT INTO ChiTietHoaDon (MaHoaDon, MaSP, SoLuong, DonGia, ThanhTien)
+            VALUES (?, ?, ?, ?, ?)
+        """, (ma_hoadon, ma_sp, so_luong, don_gia, thanh_tien))
+        con.commit()
+        return jsonify({"status": "success"})
+    except Exception as e:
+        return jsonify({"status": "fail", "message": str(e)}), 500
+
+
+@app.route('/TaiKhoanThanhVien/truSoDu', methods=['POST'])
+def tru_so_du():
+    data = request.json
+    ma_taikhoan = data.get('MaTaiKhoan')
+    so_tien = data.get('SoTien')
+
+    if not ma_taikhoan or so_tien is None:
+        return jsonify({"status": "fail", "message": "Thiếu thông tin"}), 400
+
+    cursor = con.cursor()
+    try:
+        # Kiểm tra số dư hiện tại
+        cursor.execute("SELECT SoDu FROM TaiKhoanThanhVien WHERE MaTaiKhoan = ?", (ma_taikhoan,))
+        row = cursor.fetchone()
+        if not row:
+            return jsonify({"status": "fail", "message": "Tài khoản không tồn tại"}), 404
+
+        so_du_hien_tai = row[0]
+        if so_du_hien_tai < so_tien:
+            return jsonify({"status": "fail", "message": "Số dư không đủ"}), 400
+
+        # Trừ số dư
+        cursor.execute("UPDATE TaiKhoanThanhVien SET SoDu = SoDu - ? WHERE MaTaiKhoan = ?", (so_tien, ma_taikhoan))
+        con.commit()
+        return jsonify({"status": "success"})
+    except Exception as e:
+        return jsonify({"status": "fail", "message": str(e)}), 500
+
+@app.route('/ChiTietHoaDon/<int:ma_hoadon>', methods=['GET'])
+def get_chitiethoadon(ma_hoadon):
+    cursor = con.cursor()
+    cursor.execute("""
+        SELECT MaSP, SoLuong, DonGia, ThanhTien
+        FROM ChiTietHoaDon
+        WHERE MaHoaDon = ?
+    """, (ma_hoadon,))
+    rows = cursor.fetchall()
+
+    result = []
+    for row in rows:
+        result.append({
+            "MaSP": row.MaSP,
+            "SoLuong": row.SoLuong,
+            "DonGia": float(row.DonGia),
+            "ThanhTien": float(row.ThanhTien)
+        })
+
+    return jsonify(result)
+
 @app.route('/NhanVien/getAll', methods=['GET'])
 def get_all_nhanvien():
     try:

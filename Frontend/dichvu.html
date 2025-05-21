@@ -73,26 +73,30 @@
         }
 
         function orderProduct(maSP, tenSP, donGia) {
-            const qtyInput = document.getElementById(`qty-${maSP}`);
-            const soLuong = parseInt(qtyInput.value);
+  const qtyInput = document.getElementById(`qty-${maSP}`);
+  const soLuong = parseInt(qtyInput.value);
 
-            if (soLuong <= 0 || isNaN(soLuong)) {
-                alert('Vui lòng chọn số lượng hợp lệ!');
-                return;
-            }
+  if (soLuong <= 0 || isNaN(soLuong)) {
+    alert('Vui lòng chọn số lượng hợp lệ!');
+    return;
+  }
 
-            // Lưu thông tin đơn hàng tạm thời vào sessionStorage
-            const orderData = {
-                MaSP: maSP,
-                TenSP: tenSP,
-                DonGia: donGia,
-                SoLuong: soLuong
-            };
-            sessionStorage.setItem('orderData', JSON.stringify(orderData));
+  let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
 
-            // Chuyển hướng sang trang đăng nhập thành viên để thanh toán
-            window.location.href = 'loginthanhvien.html';
-        }
+  const existingIndex = cart.findIndex(item => item.MaSP === maSP);
+  if (existingIndex >= 0) {
+    // Ghi đè số lượng mới, không cộng dồn
+    cart[existingIndex].SoLuong = soLuong;
+  } else {
+    cart.push({ MaSP: maSP, TenSP: tenSP, DonGia: donGia, SoLuong: soLuong });
+  }
+
+  sessionStorage.setItem('cart', JSON.stringify(cart));
+
+  window.location.href = 'thanhtoan.html';
+}
+
+
 
         // Khi trang được tải xong
         window.addEventListener('DOMContentLoaded', loadSanPham);
