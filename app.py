@@ -14,6 +14,7 @@ try:
         "Trusted_Connection=yes"
     )
     con = pyodbc.connect(conn_str)
+    cursor = con.cursor()
     print("✅ Kết nối SQL Server thành công!")
 except Exception as e:
     con = None
@@ -225,7 +226,103 @@ def nap_tien():
 
     return jsonify({"status": "success", "SoDuMoi": so_du_moi})
 
-# app run
+# === DỊCH VỤ & HÓA ĐƠN ===
+@app.route('/SanPhamDichVu/getAll', methods=['GET'])
+def get_all_sanpham():
+    cursor = con.cursor()
+    cursor.execute("SELECT MaSP, TenSP, LoaiSP, DonGia FROM SanPhamDichVu")
+    rows = cursor.fetchall()
+    return jsonify([{
+        "MaSP": row.MaSP,
+        "TenSP": row.TenSP,
+        "LoaiSP": row.LoaiSP,
+        "DonGia": float(row.DonGia)
+    } for row in rows])
+
+
+@app.route('/NhanVien/getAll', methods=['GET'])
+def get_all_nhanvien():
+    try:
+        cursor = con.cursor()
+        cursor.execute("SELECT MaNV, HoTen, VaiTro FROM NhanVien")
+        rows = cursor.fetchall()
+
+        nhanviens = []
+        for row in rows:
+            nhanviens.append({
+                "MaNV": row[0],
+                "HoTen": row[1],
+                "VaiTro": row[2]
+            })
+        return jsonify(nhanviens)
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+@app.route('/NhanVien/add', methods=['POST'])
+def add_nhanvien():
+    try:
+        data = request.json
+        cursor = con.cursor()
+        cursor.execute(
+            "INSERT INTO NhanVien (HoTen, VaiTro) VALUES (?, ?)",
+            data['HoTen'], data['VaiTro']
+        )
+        con.commit()
+        return jsonify({"status": "success"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+@app.route('/NhanVien/delete/<int:maNV>', methods=['DELETE'])
+def delete_nhanvien(maNV):
+    try:
+        cursor = con.cursor()
+        cursor.execute("DELETE FROM NhanVien WHERE MaNV = ?", maNV)
+        con.commit()
+        return jsonify({"status": "success"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+
+# ✅ API: Lấy tất cả báo cáo doanh thu
+@app.route('/BaoCaoDoanhThu/getAll', methods=['GET'])
+def get_baocao():
+    try:
+        cursor.execute("SELECT Ngay, TongDoanhThu, TongGioChoi, SPBanChayNhat FROM BaoCaoDoanhThu")
+        rows = cursor.fetchall()
+        result = []
+        for r in rows:
+            result.append({
+                "Ngay": r.Ngay.strftime('%Y-%m-%d'),
+                "TongDoanhThu": float(r.TongDoanhThu),
+                "TongGioChoi": r.TongGioChoi,
+                "SPBanChayNhat": r.SPBanChayNhat
+            })
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)})
+
+
+# ✅ API: Thêm báo cáo doanh thu mới
+@app.route('/BaoCaoDoanhThu/add', methods=['POST'])
+def add_baocao():
+    try:
+        data = request.get_json()
+        ngay = data['Ngay']
+        doanhthu = data['TongDoanhThu']
+        giochoi = data['TongGioChoi']
+        spbanchay = data['SPBanChayNhat']
+
+        cursor.execute("""
+            INSERT INTO BaoCaoDoanhThu (Ngay, TongDoanhThu, TongGioChoi, SPBanChayNhat)
+            VALUES (?, ?, ?, ?)
+        """, (ngay, doanhthu, giochoi, spbanchay))
+        con.commit()
+
+        return jsonify({'status': 'success'})
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)})
+
+
+# === CHẠY APP ===
 if __name__ == '__main__':
     if con:
         app.run(debug=True)

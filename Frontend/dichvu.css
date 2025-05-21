@@ -43,3 +43,94 @@
   .navbar-collapse {
     text-align: center;
   }
+
+  body {
+    background: linear-gradient(120deg, #0f0f0f, #1a1a1a);
+    color: #00ffc3;
+    font-family: Arial, sans-serif;
+    padding-top: 70px;
+  }
+  
+  /* Tiêu đề trang */
+  .container {
+    padding-top: 100px; /* tương tự pt-5 + margin top cho khoảng cách */
+    padding-bottom: 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .container h2 {
+    text-align: center;
+    font-size: 3.5rem;
+    margin-bottom: 40px;
+    color: #00ffc3;
+    text-shadow: 0 0 5px #00ffc3, 0 0 10px #00ffc3;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 1.5s ease forwards;
+    animation-delay: 0.3s;
+  }
+  
+  #product-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+  }
+  
+  /* Hiệu ứng cho fadeInUp */
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+
+  /* Card dịch vụ */
+  .card {
+    background-color: #1a1a1a;
+    border: 1px solid #00ffc3;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 255, 195, 0.5);
+    color: #00ffc3;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px #00ffc3;
+    border-color: #00ffc3;
+  }
+  
+  .card-body {
+    padding: 20px;
+  }
+  
+  /* Tiêu đề dịch vụ trong card */
+  .card-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    text-shadow: 0 0 8px #00ffc3;
+  }
+  
+  /* Mô tả loại dịch vụ */
+  .card-text {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    color: #000;
+  }
+  
+  /* Giá dịch vụ */
+  .card-text strong {
+    color: #00ffc3;
+  }
+  
+  /* Responsive: nhỏ hơn 768px thì mỗi card chiếm full */
+  @media (max-width: 767.98px) {
+    .col-md-4 {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+  }

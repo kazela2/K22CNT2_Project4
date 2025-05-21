@@ -98,3 +98,22 @@
     text-shadow: 0 0 3px #bf616a99;
   }
   
+  a.back-link {
+    display: inline-block;
+    margin-top: 20px;
+    color: #81a1c1; /* xanh dịu nhẹ như tiêu đề */
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    text-shadow: 0 0 6px #5e81ac;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+  }
+  
+  a.back-link:hover,
+  a.back-link:focus {
+    color: #eceff4; /* sáng hơn khi hover */
+    text-shadow: 0 0 10px #81a1c1;
+    cursor: pointer;
+    outline: none;
+  }
+  

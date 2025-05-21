@@ -3,11 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <title>Đăng nhập thành viên</title>
-  <link rel="stylesheet" href="thanhvien.css">
+  <link rel="stylesheet" href="thanhvien.css" />
 </head>
 <body class="container pt-5">
 
   <h3>Đăng nhập thành viên</h3>
+
+  <!-- Thêm phần hiển thị đơn hàng đã chọn -->
+  <div id="orderSummary" class="mb-4" style="border: 1px solid #ddd; padding: 10px; border-radius: 5px;">
+    <h5>Đơn hàng của bạn</h5>
+    <div id="orderDetails">Loading...</div>
+  </div>
+
   <form id="loginForm">
     <div class="mb-3">
       <label for="username" class="form-label">Tên đăng nhập</label>

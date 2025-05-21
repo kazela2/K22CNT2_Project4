@@ -65,3 +65,29 @@ button:hover {
 .message.error {
     color: red;
 }
+
+a.back-link {
+    display: block;           /* để xuống dòng, dễ canh */
+    width: 100%;
+    margin-top: 1.5rem;
+    text-align: center;
+    color: #00ffc3;           /* màu neon xanh */
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border: 2px solid #00ffc3;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    box-shadow: 0 0 8px #00ffc3;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  a.back-link:hover,
+  a.back-link:focus {
+    background-color: #00ffc3;
+    color: #141e30;       /* đổi chữ tối khi hover */
+    box-shadow: 0 0 20px #00ffc3, 0 0 30px #00ffc3;
+    outline: none;
+    cursor: pointer;
+  }
+  

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quản Lý Nhân Viên</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Quản Trị</h2>
+    <a href="#">📦 Quản lý Doanh Thu</a>
+    <a href="#">🧾 Quản lý Hóa Đơn</a>
+    <a href="#">👥 Quản lý Khách hàng</a>
+    <a href="#">📊 Quản Lý Nhân Viên</a>
+  </div>
+
+  <div class="main-content">
+    <header>
+      <h1>Danh Sách Nhân Viên</h1>
+      <button class="logout-btn" onclick="dangXuat()">Đăng xuất</button>
+    </header>
+
+    <table id="nhanvien-table" class="styled-table">
+      <thead>
+        <tr>
+          <th>Mã NV</th>
+          <th>Họ Tên</th>
+          <th>Vai Trò</th>
+          <th>Hành Động</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div class="mt-4">
+      <h3>Thêm nhân viên mới</h3>
+      <form id="addForm">
+        <input type="text" id="hoTen" placeholder="Họ tên" required />
+        <select id="vaiTro" required>
+          <option value="">Chọn vai trò</option>
+          <option value="NhanVien">Nhân Viên</option>
+          <option value="QuanLy">Quản Lý</option>
+        </select>
+        <button type="submit">Tuyển Nhân Tài</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Hàm tải danh sách nhân viên
+    async function loadNhanVien() {
+      try {
+        const res = await fetch('http://127.0.0.1:5000/NhanVien/getAll');
+        const data = await res.json();
+
+        const tbody = document.querySelector('#nhanvien-table tbody');
+        tbody.innerHTML = '';
+
+        data.forEach(nv => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${nv.MaNV}</td>
+            <td>${nv.HoTen}</td>
+            <td>${nv.VaiTro === 'NhanVien' ? 'Nhân Viên' : nv.VaiTro === 'QuanLy' ? 'Quản Lý' : nv.VaiTro}</td>
+            <td><button onclick="xoaNhanVien(${nv.MaNV})">Sa Thải</button></td>
+          `;
+          tbody.appendChild(row);
+        });
+      } catch (error) {
+        console.error('Lỗi khi tải nhân viên:', error);
+      }
+    }
+
+    // Xử lý form thêm nhân viên
+    document.getElementById('addForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const hoTen = document.getElementById('hoTen').value.trim();
+      const vaiTro = document.getElementById('vaiTro').value;
+
+      if (!hoTen || !vaiTro) {
+        alert('Vui lòng điền đủ thông tin!');
+        return;
+      }
+
+      try {
+        const res = await fetch('http://127.0.0.1:5000/NhanVien/add', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ HoTen: hoTen, VaiTro: vaiTro })
+        });
+        const data = await res.json();
+
+        if (data.status === 'success') {
+          alert('✅ Thêm nhân viên thành công!');
+          loadNhanVien();
+          this.reset();
+        } else {
+          alert('❌ Thêm thất bại: ' + data.message);
+        }
+      } catch (err) {
+        console.error('Lỗi thêm nhân viên:', err);
+        alert('Có lỗi xảy ra khi thêm nhân viên!');
+      }
+    });
+
+    // Hàm xóa nhân viên
+    async function xoaNhanVien(maNV) {
+      if (!confirm('Bạn có chắc chắn muốn sa thải nhân viên này?')) return;
+
+      try {
+        const res = await fetch(`http://127.0.0.1:5000/NhanVien/delete/${maNV}`, {
+          method: 'DELETE'
+        });
+        const data = await res.json();
+
+        if (data.status === 'success') {
+          alert('🗑️ Đã sa thải nhân viên.');
+          loadNhanVien();
+        } else {
+          alert('❌ Xóa thất bại: ' + data.message);
+        }
+      } catch (err) {
+        console.error('Lỗi xóa nhân viên:', err);
+        alert('Có lỗi xảy ra khi xóa nhân viên!');
+      }
+    }
+
+    // Tải danh sách khi trang load
+    window.addEventListener('DOMContentLoaded', loadNhanVien);
+
+    function dangXuat() {
+    // Xóa thông tin admin khỏi localStorage
+    localStorage.removeItem("admin");
+  
+    // Chuyển về trang đăng nhập
+    window.location.href = "login.html";
+  }
+  </script>
+</body>
+</html>

@@ -24,7 +24,6 @@ CREATE TABLE NhanVien (
     VaiTro NVARCHAR(20) CHECK (VaiTro IN ('NhanVien', 'QuanLy'))
 );
 
-
 CREATE TABLE TaiKhoanThanhVien (
     MaTaiKhoan INT PRIMARY KEY IDENTITY(1,1),
 	HoTen NVARCHAR(100),
@@ -44,12 +43,6 @@ CREATE TABLE PhienChoi (
     TongTien DECIMAL(18,2)
 );
 
-CREATE TABLE LichSuDangNhapKhach (
-    MaLichSu INT PRIMARY KEY IDENTITY(1,1),
-    MaTaiKhoan INT FOREIGN KEY REFERENCES TaiKhoanThanhVien(MaTaiKhoan),
-    ThoiGianDangNhap DATETIME,
-    ThoiGianDangXuat DATETIME
-);
 
 CREATE TABLE SanPhamDichVu (
     MaSP INT PRIMARY KEY IDENTITY(1,1),
@@ -60,19 +53,25 @@ CREATE TABLE SanPhamDichVu (
 
 CREATE TABLE HoaDon (
     MaHD INT PRIMARY KEY IDENTITY(1,1),
-    MaPhien INT FOREIGN KEY REFERENCES PhienChoi(MaPhien),
     NgayLap DATETIME DEFAULT GETDATE(),
     TongTien DECIMAL(18,2)
 );
 
 CREATE TABLE ChiTietHoaDon (
-    MaHD INT FOREIGN KEY REFERENCES HoaDon(MaHD),
-    MaSP INT FOREIGN KEY REFERENCES SanPhamDichVu(MaSP),
-    SoLuong INT,
-    DonGia DECIMAL(18,2),
+    MaHD INT NOT NULL,
+    MaSP INT NOT NULL,
+    SoLuong INT NOT NULL CHECK (SoLuong > 0),
+    DonGia DECIMAL(18,2) NOT NULL CHECK (DonGia >= 0),
     ThanhTien AS (SoLuong * DonGia) PERSISTED,
-    PRIMARY KEY (MaHD, MaSP)
+    PRIMARY KEY (MaHD, MaSP),
+    CONSTRAINT FK_ChiTietHoaDon_HoaDon FOREIGN KEY (MaHD) REFERENCES HoaDon(MaHD),
+    CONSTRAINT FK_ChiTietHoaDon_SanPhamDichVu FOREIGN KEY (MaSP) REFERENCES SanPhamDichVu(MaSP)
 );
+select * from HoaDon
+select * from ChiTietHoaDon
+select * from TaiKhoanThanhVien
+drop table HoaDon
+drop table ChiTietHoaDon
 
 
 CREATE TABLE BaoCaoDoanhThu (
@@ -110,17 +109,14 @@ INSERT INTO PhienChoi (MaMay, MaTaiKhoan, GioBatDau, GioKetThuc, TongTien) VALUE
 (2, 2, '2025-05-17 09:15', '2025-05-17 10:45', 18000),
 (1, 3, '2025-05-17 11:00', NULL, NULL);
 
--- LichSuDangNhapKhach
-INSERT INTO LichSuDangNhapKhach (MaTaiKhoan, ThoiGianDangNhap, ThoiGianDangXuat) VALUES
-(1, '2025-05-17 08:00', '2025-05-17 09:00'),
-(2, '2025-05-17 09:15', '2025-05-17 10:45'),
-(3, '2025-05-17 11:00', NULL);
-
 -- SanPhamDichVu
 INSERT INTO SanPhamDichVu (TenSP, LoaiSP, DonGia) VALUES
 (N'Nước suối', N'Đồ uống', 10000),
 (N'Mì ly', N'Đồ ăn', 15000),
-(N'Cafe đen', N'Đồ uống', 12000);
+(N'Cafe đen', N'Đồ uống', 12000),
+(N'Trà sữa trân châu', N'Đồ uống', 25000),
+(N'Bánh mì chà bông', N'Đồ ăn', 20000),
+(N'Nước tăng lực Sting', N'Đồ uống', 15000);
 
 -- HoaDon
 INSERT INTO HoaDon (MaPhien, NgayLap, TongTien) VALUES
@@ -144,3 +140,4 @@ INSERT INTO BaoCaoDoanhThu (Ngay, TongDoanhThu, TongGioChoi, SPBanChayNhat) VALU
 -- TaikhoanAdmin
 INSERT INTO TaiKhoanAdmin (HoTen, TenDangNhap, MatKhau) VALUES
 (N'Ba Anh Em Nhà Hề', 'admin', '123456');
+

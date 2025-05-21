@@ -45,3 +45,21 @@ body {
   .login-box button:hover {
     background-color: #00c4d6;
   }
+
+
+/* Nút quay lại dưới box */
+.back-btn {
+  margin-top: 20px;
+  display: inline-block;
+  background-color: transparent;
+  color: #00ffc3;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 15px;
+  transition: color 0.3s, text-shadow 0.3s;
+}
+
+.back-btn:hover {
+  color: #00c4d6;
+  text-shadow: 0 0 5px #00ffc3;
+}
